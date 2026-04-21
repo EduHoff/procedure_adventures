@@ -19,6 +19,6 @@ pub fn render(map: &Map, player: &Player) {
                 }
             }
         }
-        println!();
+        print!("\r\n")
     }
 }
