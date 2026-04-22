@@ -18,7 +18,7 @@ fn main() {
             if direction == crossterm::event::KeyCode::Esc {
                 break;
             }
-            movement::handle_move(&mut player, direction);
+            movement::handle_move(&mut player, &map, direction);
         }
     }
 
