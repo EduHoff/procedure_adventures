@@ -1,0 +1,6 @@
+services:
+  app:
+    build: .
+    image: procedure_adventures
+    stdin_open: true 
+    tty: true
