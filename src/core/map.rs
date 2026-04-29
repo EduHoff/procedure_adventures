@@ -2,6 +2,7 @@
 pub enum Tile {
     Empty,
     Wall,
+    Water,
 }
 
 pub struct Map {

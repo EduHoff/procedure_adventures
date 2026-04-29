@@ -1,4 +1,5 @@
 use clearscreen::clear;
+use colored::Colorize;
 use crossterm::terminal::disable_raw_mode;
 use crossterm::terminal::enable_raw_mode;
 
@@ -12,12 +13,13 @@ pub fn render(map: &Map, player: &Player) {
     for y in 0..map.height {
         for x in 0..map.width {
             if x == player.x && y == player.y {
-                print!("@ ");
+                print!("{}", "@ ".green().bold());
             } else {
                 let idx = map.get_index(x, y);
                 match map.tiles[idx] {
-                    Tile::Empty => print!(". "),
-                    Tile::Wall => print!("# "),
+                    Tile::Empty => print!("{}", ". ".bright_black()),
+                    Tile::Wall => print!("{}", "# ".white().dimmed()),
+                    Tile::Water => print!("{}", "~ ".cyan()),
                 }
             }
         }
@@ -28,12 +30,12 @@ pub fn render(map: &Map, player: &Player) {
 pub struct RawModeGuard;
 
 impl Default for RawModeGuard {
-     fn default() -> Self {
-         Self::new()
-     }
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
-impl RawModeGuard {  
+impl RawModeGuard {
     pub fn new() -> Self {
         enable_raw_mode().expect("Error activating Raw Mode.");
         RawModeGuard

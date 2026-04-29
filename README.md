@@ -15,8 +15,3 @@ docker exec -it procedure_adventures_dev cargo run
 ```
 docker compose down
 ```
-
-## Reconstruir imagem
-```
-docker compose build --no-cache
-```

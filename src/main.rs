@@ -1,5 +1,8 @@
 use procedure_adventures::{
-    core::{entities::Player, map::{Map, Tile}},
+    core::{
+        entities::Player,
+        map::{Map, Tile},
+    },
     display::terminal,
     engine::movement,
 };
@@ -12,11 +15,15 @@ fn main() {
         map.set_tile(x, 10, Tile::Wall);
     }
 
+    for x in 0..10 {
+        map.set_tile(x, 15, Tile::Water);
+    }
+
     let _guard = terminal::RawModeGuard::new();
 
     loop {
         terminal::render(&map, &player);
-        
+
         if let Some(direction) = movement::get_input() {
             if direction == crossterm::event::KeyCode::Esc {
                 break;
@@ -24,5 +31,4 @@ fn main() {
             movement::handle_move(&mut player, &map, direction);
         }
     }
-
 }

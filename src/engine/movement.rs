@@ -1,12 +1,17 @@
-use crossterm::event::{Event, KeyCode, read};
+use std::{thread, time::Duration};
 
-use crate::core::{entities::Player, map::{Map, Tile}};
+use crossterm::event::{Event, KeyCode, poll, read};
+
+use crate::core::{
+    entities::Player,
+    map::{Map, Tile},
+};
 
 enum Direction {
     Up,
     Down,
     Left,
-    Right
+    Right,
 }
 
 pub fn get_input() -> Option<KeyCode> {
@@ -14,6 +19,12 @@ pub fn get_input() -> Option<KeyCode> {
         return Some(key_event.code);
     }
     None
+}
+
+fn clear_input_buffer() {
+    while let Ok(true) = poll(Duration::from_millis(0)) {
+        let _ = read();
+    }
 }
 
 pub fn handle_move(player: &mut Player, map: &Map, key: KeyCode) {
@@ -26,64 +37,69 @@ pub fn handle_move(player: &mut Player, map: &Map, key: KeyCode) {
     }
 }
 
-fn move_restrictions(player: &Player, map: &Map, move_direction: Direction) -> bool{
-
+fn move_restrictions(player: &Player, map: &Map, move_direction: Direction) -> bool {
     let target_position = match move_direction {
-        Direction::Up =>{
-            (player.x, player.y.saturating_sub(1))
-        }
-        Direction::Down =>{
-            if player.y + 1 >= map.height{
-                return true;
-            } 
-            
-            (player.x, player.y+1)
-        }
-        Direction::Left =>{
-            (player.x.saturating_sub(1), player.y)
-        }
-        Direction::Right =>{
-            if player.x + 1 >= map.width{
+        Direction::Up => (player.x, player.y.saturating_sub(1)),
+        Direction::Down => {
+            if player.y + 1 >= map.height {
                 return true;
             }
-            
-            (player.x+1, player.y)
-        }  
+
+            (player.x, player.y + 1)
+        }
+        Direction::Left => (player.x.saturating_sub(1), player.y),
+        Direction::Right => {
+            if player.x + 1 >= map.width {
+                return true;
+            }
+
+            (player.x + 1, player.y)
+        }
     };
 
     let (target_x, target_y) = target_position;
 
-    if map.get_tile(target_x, target_y) == Tile::Wall{
-        return true;        
+    if map.get_tile(target_x, target_y) == Tile::Wall {
+        return true;
+    }
+
+    if map.get_tile(player.x, player.y) == Tile::Water {
+        thread::sleep(Duration::from_millis(200));
+        clear_input_buffer();
+        return false;
     }
 
     false
 }
 
-fn move_up(player: &mut Player, map: &Map){
-    
-    if move_restrictions(player, map, Direction::Up) {return};
-    
+fn move_up(player: &mut Player, map: &Map) {
+    if move_restrictions(player, map, Direction::Up) {
+        return;
+    };
+
     player.y = player.y.saturating_sub(1);
 }
 
-fn move_down(player: &mut Player, map: &Map){
-    
-    if move_restrictions(player, map, Direction::Down) {return};
+fn move_down(player: &mut Player, map: &Map) {
+    if move_restrictions(player, map, Direction::Down) {
+        return;
+    };
 
     player.y += 1;
 }
 
-fn move_left(player: &mut Player, map: &Map){
-    
-    if move_restrictions(player, map, Direction::Left) {return};
-    
+fn move_left(player: &mut Player, map: &Map) {
+    if move_restrictions(player, map, Direction::Left) {
+        return;
+    };
+
     player.x = player.x.saturating_sub(1);
 }
 
-fn move_right(player: &mut Player, map: &Map){
-
-    if move_restrictions(player, map, Direction::Right) {return};
+fn move_right(player: &mut Player, map: &Map) {
+    if move_restrictions(player, map, Direction::Right) {
+        return;
+    };
 
     player.x += 1;
 }
