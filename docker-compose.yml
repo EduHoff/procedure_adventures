@@ -1,15 +1,15 @@
 services:
   dev:
-    image: rust:1.82-bookworm
+    build: .
+    container_name: procedure_adventures_dev
     volumes:
       - .:/app
       - cargo-cache:/usr/local/cargo/registry
     working_dir: /app
     stdin_open: true
     tty: true
-    command: /bin/bash
     environment:
-      - RUST_BACKTRACE=1
+      - TERM=xterm-256color
 
 volumes:
   cargo-cache:

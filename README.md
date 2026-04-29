@@ -7,7 +7,8 @@ docker compose up --build
 
 ## Iniciar
 ```
-docker compose exec dev cargo run
+docker compose up -d
+docker exec -it procedure_adventures_dev cargo run
 ```
 
 ## Encerrar
