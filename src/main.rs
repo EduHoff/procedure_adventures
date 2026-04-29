@@ -1,4 +1,3 @@
-use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use procedure_adventures::{
     core::{entities::Player, map::{Map, Tile}},
     display::terminal,
@@ -13,7 +12,7 @@ fn main() {
         map.set_tile(x, 10, Tile::Wall);
     }
 
-    enable_raw_mode().expect("Error activating Raw Mode.");
+    let _guard = terminal::RawModeGuard::new();
 
     loop {
         terminal::render(&map, &player);
@@ -26,5 +25,4 @@ fn main() {
         }
     }
 
-    disable_raw_mode().expect("Error disabling Raw Mode");
 }
