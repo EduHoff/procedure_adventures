@@ -1,6 +1,15 @@
 services:
-  app:
-    build: .
-    image: procedure_adventures
-    stdin_open: true 
+  dev:
+    image: rust:1.82-bookworm
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+    working_dir: /app
+    stdin_open: true
     tty: true
+    command: /bin/bash
+    environment:
+      - RUST_BACKTRACE=1
+
+volumes:
+  cargo-cache:

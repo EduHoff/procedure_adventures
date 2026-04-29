@@ -7,10 +7,15 @@ docker compose up --build
 
 ## Iniciar
 ```
-docker run -it --rm procedure_adventures
+docker compose exec dev cargo run
 ```
 
 ## Encerrar
 ```
 docker compose down
+```
+
+## Reconstruir imagem
+```
+docker compose build --no-cache
 ```

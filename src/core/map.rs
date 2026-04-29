@@ -23,4 +23,9 @@ impl Map {
     pub fn get_index(&self, x: usize, y: usize) -> usize {
         (y * self.width) + x
     }
+
+    pub fn set_tile(&mut self, x: usize, y: usize, tile: Tile) {
+        let idx: usize = self.get_index(x, y);
+        self.tiles[idx] = tile;
+    }
 }

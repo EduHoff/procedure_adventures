@@ -1,19 +1,23 @@
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use procedure_adventures::{
-    core::{entities::Player, map::Map},
+    core::{entities::Player, map::{Map, Tile}},
     display::terminal,
     engine::movement,
 };
 
 fn main() {
-    let map = Map::new(20, 20);
+    let mut map = Map::new(20, 20);
     let mut player = Player { x: 5, y: 5 };
+
+    for x in 0..10 {
+        map.set_tile(x, 10, Tile::Wall);
+    }
 
     enable_raw_mode().expect("Error activating Raw Mode.");
 
     loop {
         terminal::render(&map, &player);
-
+        
         if let Some(direction) = movement::get_input() {
             if direction == crossterm::event::KeyCode::Esc {
                 break;
